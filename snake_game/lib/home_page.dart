@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -21,11 +22,13 @@ class _HomePageState extends State<HomePage> {
   int rowSize = 10;
   int totalNumberOfSquares = 100;
 
+  //user score
+  int currentScore = 0;
   //snake position
   List<int> snakePos = [
-    0,
-    1,
-    2,
+    46,
+    47,
+    48,
   ];
 
   var currentDirection = SnakeDirection.right;
@@ -35,39 +38,87 @@ class _HomePageState extends State<HomePage> {
   void startGame() {
     Timer.periodic(Duration(milliseconds: 200), (timer) {
       setState(() {
+        //keep the snake moving
         moveSnake();
+
+        //check if the game is over
+        if (gameOver()) {
+          timer.cancel();
+          //display a message to the user
+          showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(title: Text("Game Over"),content: Text("Your score is:" + currentScore.toString()),);
+              }); 
+        }
       });
     });
+  }
+
+  void eatFood() {
+    //HOW DOES THIS FUNCTION GET RANDOM NUMBERS EXCLUDING NUMBERS IN THE snakePos LIST
+    while (snakePos.contains(foodPos)) {
+      foodPos = Random().nextInt(totalNumberOfSquares);
+    }
   }
 
   void moveSnake() {
     switch (currentDirection) {
       case SnakeDirection.right:
         {
-          snakePos.add(snakePos.last + 1);
-          snakePos.removeAt(0);
+          //if snake is at the right wall, need to re-adjust
+          if (snakePos.last % rowSize == 9) {
+            snakePos.add(snakePos.last + 1 - rowSize);
+          } else {
+            snakePos.add(snakePos.last + 1);
+          }
         }
         break;
       case SnakeDirection.left:
         {
-          snakePos.add(snakePos.last - 1);
-          snakePos.removeAt(0);
+          if (snakePos.last % rowSize == 0) {
+            snakePos.add(snakePos.last - 1 + rowSize);
+          } else {
+            snakePos.add(snakePos.last - 1);
+          }
         }
         break;
       case SnakeDirection.up:
         {
-          snakePos.add(snakePos.last - rowSize);
-          snakePos.removeAt(0);
+          if (snakePos.last < rowSize)
+            snakePos.add(snakePos.last - rowSize + totalNumberOfSquares);
+          else {
+            snakePos.add(snakePos.last - rowSize);
+          }
         }
         break;
       case SnakeDirection.down:
         {
-          snakePos.add(snakePos.last + rowSize);
-          snakePos.removeAt(0);
+          if (snakePos.last >= totalNumberOfSquares - rowSize) {
+            snakePos.add(snakePos.last + rowSize - totalNumberOfSquares);
+          } else {
+            snakePos.add(snakePos.last + rowSize);
+          }
         }
         break;
       default:
     }
+    if (snakePos.last == foodPos) {
+      eatFood();
+    } else {
+      snakePos.removeAt(0);
+    }
+  }
+
+  bool gameOver() {
+    //duplicate checking for body collision
+    //this list is the body of the snake (no head)
+    List<int> bodySnake = snakePos.sublist(0, snakePos.length - 1);
+
+    if (bodySnake.contains(snakePos.last)) {
+      return true;
+    }
+    return false;
   }
 
   @override
@@ -81,16 +132,20 @@ class _HomePageState extends State<HomePage> {
               flex: 3,
               child: GestureDetector(
                 onVerticalDragUpdate: (details) {
-                  if (details.delta.dy > 0) {
+                  if (details.delta.dy > 0 &&
+                      currentDirection != SnakeDirection.up) {
                     currentDirection = SnakeDirection.down;
-                  } else if (details.delta.dy < 0) {
+                  } else if (details.delta.dy < 0 &&
+                      currentDirection != SnakeDirection.down) {
                     currentDirection = SnakeDirection.up;
                   }
                 },
                 onHorizontalDragUpdate: (details) {
-                  if (details.delta.dx > 0) {
+                  if (details.delta.dx > 0 &&
+                      currentDirection != SnakeDirection.left) {
                     currentDirection = SnakeDirection.right;
-                  } else if (details.delta.dx < 0) {
+                  } else if (details.delta.dx < 0 &&
+                      currentDirection != SnakeDirection.right) {
                     currentDirection = SnakeDirection.left;
                   }
                 },
