@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  var screenHeight = window.physicalSize.height / window.devicePixelRatio;
+  var screenWidth = window.physicalSize.width / window.devicePixelRatio;
   int rowSize = 10;
   int totalNumberOfSquares = 100;
   bool gameHasStarted = false;
@@ -77,48 +80,48 @@ class _HomePageState extends State<HomePage> {
               context: context,
               barrierDismissible: false,
               builder: (context) {
-                return SizedBox(
-                  // height: screenWidth > 428 ? 428 : 428,
-                  child: AlertDialog(
-                    title: Text("Game Over"),
-                    content: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          children: [
-                            Text("Your score is:" + currentScore.toString()),
-                            TextField(
-                                controller: _nameController,
-                                decoration: InputDecoration(
-                                    hintText: 'Enter Your Name')),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            MaterialButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                                newGame();
-                              },
-                              child: Text("Close"),
-                              color: Colors.pink,
-                            ),
-                            MaterialButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                                submitScore();
-                                newGame();
-                              },
-                              child: Text("Submit"),
-                              color: Colors.pink,
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
-                    actions: [],
+                return AlertDialog(
+                  title: Text("Game Over"),
+                  insetPadding: MediaQuery.of(context).size.width > 428
+                      ? EdgeInsets.symmetric(vertical: 200)
+                      : EdgeInsets.symmetric(vertical: 100),
+                  content: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        children: [
+                          Text("Your score is:" + currentScore.toString()),
+                          TextField(
+                              controller: _nameController,
+                              decoration:
+                                  InputDecoration(hintText: 'Enter Your Name')),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          MaterialButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                              newGame();
+                            },
+                            child: Text("Close"),
+                            color: Colors.pink,
+                          ),
+                          MaterialButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                              submitScore();
+                              newGame();
+                            },
+                            child: Text("Submit"),
+                            color: Colors.pink,
+                          ),
+                        ],
+                      )
+                    ],
                   ),
+                  actions: [],
                 );
               });
         }
@@ -220,9 +223,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
-
     return Scaffold(
       backgroundColor: Colors.black,
       body: RawKeyboardListener(
@@ -327,8 +327,7 @@ class _HomePageState extends State<HomePage> {
                       child: Text("PLAY"),
                       textColor: Colors.white,
                       color: gameHasStarted ? Colors.grey : Colors.pink,
-                      onPressed:
-                          gameHasStarted ? () {} : startGame,
+                      onPressed: gameHasStarted ? () {} : startGame,
                     )),
                   ),
                 ),
