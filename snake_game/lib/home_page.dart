@@ -10,6 +10,11 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:snake_game/blank_pixel.dart';
 import 'package:snake_game/highscore_tile.dart';
 import 'package:snake_game/snake_pixel.dart';
+import 'package:snake_game/snakehead_positions/snake_down.dart';
+import 'package:snake_game/snakehead_positions/snake_left.dart';
+import 'package:snake_game/snakehead_positions/snake_right.dart';
+import 'package:snake_game/snakehead_positions/snake_tail.dart';
+import 'package:snake_game/snakehead_positions/snake_up.dart';
 
 import 'food_pixel.dart';
 
@@ -272,12 +277,15 @@ class _HomePageState extends State<HomePage> {
                           : FutureBuilder(
                               future: letsGetDocIds,
                               builder: (context, snapshot) {
-                                return ListView.builder(
-                                  itemCount: highscore_DocIds.length,
-                                  itemBuilder: ((context, index) {
-                                    return HighScoreTile(
-                                        documentId: highscore_DocIds[index]);
-                                  }),
+                                return Center(
+                                  child: ListView.builder(
+                                    shrinkWrap: true,
+                                    itemCount: highscore_DocIds.length,
+                                    itemBuilder: ((context, index) {
+                                      return HighScoreTile(
+                                          documentId: highscore_DocIds[index]);
+                                    }),
+                                  ),
                                 );
                               }),
                     ),
@@ -311,7 +319,21 @@ class _HomePageState extends State<HomePage> {
                               SliverGridDelegateWithFixedCrossAxisCount(
                                   crossAxisCount: rowSize),
                           itemBuilder: (context, index) {
-                            if (snakePos.contains(index)) {
+                            if (snakePos.last == index &&
+                                currentDirection == SnakeDirection.left) {
+                              return const SnakeLeft();
+                            } else if (snakePos.last == index &&
+                                currentDirection == SnakeDirection.right) {
+                              return const SnakeRight();
+                            } else if (snakePos.last == index &&
+                                currentDirection == SnakeDirection.up) {
+                              return const SnakeUp();
+                            } else if (snakePos.last == index &&
+                                currentDirection == SnakeDirection.down) {
+                              return const SnakeDown();
+                            } else if (snakePos[0] == index) {
+                              return const SnakeTail();
+                            } else if (snakePos.contains(index)) {
                               return const SnakePixel();
                             } else if (foodPos == index) {
                               return const FoodPixel();
