@@ -8,9 +8,8 @@ import 'package:flutter/services.dart';
 import 'package:snake_game/blank_pixel.dart';
 import 'package:snake_game/highscore_tile.dart';
 import 'package:snake_game/snake_pixel.dart';
+import 'package:snake_game/utils.dart';
 
-import 'package:snake_game/snakehead_positions/snake_head.dart';
-import 'package:snake_game/snakehead_positions/snake_tail.dart';
 
 import 'food_pixel.dart';
 
@@ -94,8 +93,8 @@ class _HomePageState extends State<HomePage> {
                           Text("Your score is:" + currentScore.toString()),
                           TextField(
                               controller: _nameController,
-                              decoration:
-                                  const InputDecoration(hintText: 'Enter Your Name')),
+                              decoration: const InputDecoration(
+                                  hintText: 'Enter Your Name')),
                         ],
                       ),
                       Row(
@@ -381,7 +380,7 @@ class SnakeHeadRight extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
             color: Colors.grey[900], borderRadius: BorderRadius.circular(4)),
-        child: Image.asset("right.png"),
+        child: Image.asset(path("right.png")),
       ),
     );
   }
@@ -399,7 +398,7 @@ class SnakeHeadUp extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
             color: Colors.grey[900], borderRadius: BorderRadius.circular(4)),
-        child: Image.asset("up.png"),
+        child: Image.asset(path("up.png")),
       ),
     );
   }
@@ -417,7 +416,7 @@ class SnakeHeadLeft extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
             color: Colors.grey[900], borderRadius: BorderRadius.circular(4)),
-        child: Image.asset("left.png"),
+        child: Image.asset(path("left.png")),
       ),
     );
   }
@@ -435,7 +434,7 @@ class SnakeHeadDown extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
             color: Colors.grey[900], borderRadius: BorderRadius.circular(4)),
-        child: Image.asset("down.png"),
+        child: Image.asset(path("down.png")),
       ),
     );
   }
@@ -453,7 +452,7 @@ class SnakeTailDown extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
             color: Colors.grey[900], borderRadius: BorderRadius.circular(4)),
-        child: Image.asset("down.png"),
+        child: Image.asset(path("down.png")),
       ),
     );
   }
@@ -471,7 +470,7 @@ class SnakeTailLeft extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
             color: Colors.grey[900], borderRadius: BorderRadius.circular(4)),
-        child: Image.asset("left.png"),
+        child: Image.asset(path("left.png")),
       ),
     );
   }
@@ -489,7 +488,7 @@ class SnakeTailRight extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
             color: Colors.grey[900], borderRadius: BorderRadius.circular(4)),
-        child: Image.asset("right.png"),
+        child: Image.asset(path("right.png")),
       ),
     );
   }
@@ -507,7 +506,7 @@ class SnakeTailUp extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
             color: Colors.grey[900], borderRadius: BorderRadius.circular(4)),
-        child: Image.asset("up.png"),
+        child: Image.asset(path("up.png")),
       ),
     );
   }
