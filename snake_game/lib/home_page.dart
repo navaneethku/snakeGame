@@ -68,7 +68,7 @@ class _HomePageState extends State<HomePage> {
 
   void startGame() {
     gameHasStarted = true;
-    Timer.periodic(Duration(milliseconds: 200), (timer) {
+    Timer.periodic(const Duration(milliseconds: 200), (timer) {
       setState(() {
         //keep the snake moving
         moveSnake();
@@ -82,10 +82,10 @@ class _HomePageState extends State<HomePage> {
               barrierDismissible: false,
               builder: (context) {
                 return AlertDialog(
-                  title: Text("Game Over"),
+                  title: const Text("Game Over"),
                   insetPadding: MediaQuery.of(context).size.width > 428
-                      ? EdgeInsets.symmetric(vertical: 200)
-                      : EdgeInsets.symmetric(vertical: 100),
+                      ? const EdgeInsets.symmetric(vertical: 200)
+                      : const EdgeInsets.symmetric(vertical: 100),
                   content: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -95,7 +95,7 @@ class _HomePageState extends State<HomePage> {
                           TextField(
                               controller: _nameController,
                               decoration:
-                                  InputDecoration(hintText: 'Enter Your Name')),
+                                  const InputDecoration(hintText: 'Enter Your Name')),
                         ],
                       ),
                       Row(
@@ -106,7 +106,7 @@ class _HomePageState extends State<HomePage> {
                               Navigator.pop(context);
                               newGame();
                             },
-                            child: Text("Close"),
+                            child: const Text("Close"),
                             color: Colors.pink,
                           ),
                           MaterialButton(
@@ -115,7 +115,7 @@ class _HomePageState extends State<HomePage> {
                               submitScore();
                               newGame();
                             },
-                            child: Text("Submit"),
+                            child: const Text("Submit"),
                             color: Colors.pink,
                           ),
                         ],
@@ -261,7 +261,7 @@ class _HomePageState extends State<HomePage> {
                           const Text("Current Score"),
                           Text(
                             currentScore.toString(),
-                            style: TextStyle(fontSize: 36),
+                            style: const TextStyle(fontSize: 36),
                           ),
                         ],
                       ),
@@ -315,58 +315,30 @@ class _HomePageState extends State<HomePage> {
                               SliverGridDelegateWithFixedCrossAxisCount(
                                   crossAxisCount: rowSize),
                           itemBuilder: (context, index) {
-                            if (snakePos.last == index) {
-                              return const SnakeHead();
+                            if (snakePos.last == index &&
+                                currentDirection == SnakeDirection.up) {
+                              return const SnakeHeadUp();
+                            } else if (snakePos.last == index &&
+                                currentDirection == SnakeDirection.down) {
+                              return const SnakeHeadDown();
+                            } else if (snakePos.last == index &&
+                                currentDirection == SnakeDirection.left) {
+                              return const SnakeHeadLeft();
+                            } else if (snakePos.last == index &&
+                                currentDirection == SnakeDirection.right) {
+                              return const SnakeHeadRight();
                             } else if (snakePos[0] == index &&
                                 snakePos[1] == snakePos[0] + 10) {
-                              print("0th Index" + snakePos[0].toString());
-                              print("1th Index" + snakePos[1].toString());
-                              return Padding(
-                                padding: const EdgeInsets.all(2.0),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      color: Colors.grey[900],
-                                      borderRadius: BorderRadius.circular(12)),
-                                  child: Image.asset("up.png"),
-                                ),
-                              );
+                              return const SnakeTailUp();
                             } else if (snakePos[0] == index &&
                                 snakePos[1] == snakePos[0] - 10) {
-                              return Padding(
-                                padding: const EdgeInsets.all(2.0),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      color: Colors.grey[900],
-                                      borderRadius: BorderRadius.circular(12)),
-                                  child: Image.asset("down.png"),
-                                ),
-                              );
+                              return const SnakeTailDown();
                             } else if (snakePos[0] == index &&
                                 snakePos[1] > snakePos[0]) {
-                              return Padding(
-                                padding: const EdgeInsets.all(2.0),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      color: Colors.grey[900],
-                                      borderRadius: BorderRadius.circular(12)),
-                                  child: Image.asset("left.png"),
-                                ),
-                              );
+                              return const SnakeTailLeft();
                             } else if (snakePos[0] == index &&
                                 snakePos[1] < snakePos[0]) {
-                              print("0th Index on Left Movement of 1st Index" +
-                                  snakePos[0].toString());
-                              print("1th Index  on Left Movement of 1st Index" +
-                                  snakePos[1].toString());
-                              return Padding(
-                                padding: const EdgeInsets.all(2.0),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      color: Colors.grey[900],
-                                      borderRadius: BorderRadius.circular(12)),
-                                  child: Image.asset("right.png"),
-                                ),
-                              );
+                              return const SnakeTailRight();
                             } else if (snakePos.contains(index)) {
                               return const SnakePixel();
                             } else if (foodPos == index) {
@@ -381,7 +353,7 @@ class _HomePageState extends State<HomePage> {
                   child: Container(
                     child: Center(
                         child: MaterialButton(
-                      child: Text("PLAY"),
+                      child: const Text("PLAY"),
                       textColor: Colors.white,
                       color: gameHasStarted ? Colors.grey : Colors.pink,
                       onPressed: gameHasStarted ? () {} : startGame,
@@ -392,6 +364,150 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class SnakeHeadRight extends StatelessWidget {
+  const SnakeHeadRight({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(2.0),
+      child: Container(
+        decoration: BoxDecoration(
+            color: Colors.grey[900], borderRadius: BorderRadius.circular(4)),
+        child: Image.asset("right.png"),
+      ),
+    );
+  }
+}
+
+class SnakeHeadUp extends StatelessWidget {
+  const SnakeHeadUp({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(2.0),
+      child: Container(
+        decoration: BoxDecoration(
+            color: Colors.grey[900], borderRadius: BorderRadius.circular(4)),
+        child: Image.asset("up.png"),
+      ),
+    );
+  }
+}
+
+class SnakeHeadLeft extends StatelessWidget {
+  const SnakeHeadLeft({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(2.0),
+      child: Container(
+        decoration: BoxDecoration(
+            color: Colors.grey[900], borderRadius: BorderRadius.circular(4)),
+        child: Image.asset("left.png"),
+      ),
+    );
+  }
+}
+
+class SnakeHeadDown extends StatelessWidget {
+  const SnakeHeadDown({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(2.0),
+      child: Container(
+        decoration: BoxDecoration(
+            color: Colors.grey[900], borderRadius: BorderRadius.circular(4)),
+        child: Image.asset("down.png"),
+      ),
+    );
+  }
+}
+
+class SnakeTailDown extends StatelessWidget {
+  const SnakeTailDown({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(2.0),
+      child: Container(
+        decoration: BoxDecoration(
+            color: Colors.grey[900], borderRadius: BorderRadius.circular(4)),
+        child: Image.asset("down.png"),
+      ),
+    );
+  }
+}
+
+class SnakeTailLeft extends StatelessWidget {
+  const SnakeTailLeft({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(2.0),
+      child: Container(
+        decoration: BoxDecoration(
+            color: Colors.grey[900], borderRadius: BorderRadius.circular(4)),
+        child: Image.asset("left.png"),
+      ),
+    );
+  }
+}
+
+class SnakeTailRight extends StatelessWidget {
+  const SnakeTailRight({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(2.0),
+      child: Container(
+        decoration: BoxDecoration(
+            color: Colors.grey[900], borderRadius: BorderRadius.circular(4)),
+        child: Image.asset("right.png"),
+      ),
+    );
+  }
+}
+
+class SnakeTailUp extends StatelessWidget {
+  const SnakeTailUp({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(2.0),
+      child: Container(
+        decoration: BoxDecoration(
+            color: Colors.grey[900], borderRadius: BorderRadius.circular(4)),
+        child: Image.asset("up.png"),
       ),
     );
   }
