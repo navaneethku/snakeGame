@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 
-class SnakeLeft extends StatelessWidget {
-  const SnakeLeft({super.key});
+class SnakeHead extends StatelessWidget {
+  const SnakeHead({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -11,8 +11,7 @@ class SnakeLeft extends StatelessWidget {
         padding: const EdgeInsets.all(2.0),
         child: Container(
           decoration: BoxDecoration(
-              color: Colors.grey[900], borderRadius: BorderRadius.circular(4)),
-              child: Image.asset("snake_head/left.png"),
+              color: Colors.white, borderRadius: BorderRadius.circular(12)),
         ));
   }
 }

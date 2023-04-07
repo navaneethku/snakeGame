@@ -5,16 +5,12 @@ import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:snake_game/blank_pixel.dart';
 import 'package:snake_game/highscore_tile.dart';
 import 'package:snake_game/snake_pixel.dart';
-import 'package:snake_game/snakehead_positions/snake_down.dart';
-import 'package:snake_game/snakehead_positions/snake_left.dart';
-import 'package:snake_game/snakehead_positions/snake_right.dart';
+
+import 'package:snake_game/snakehead_positions/snake_head.dart';
 import 'package:snake_game/snakehead_positions/snake_tail.dart';
-import 'package:snake_game/snakehead_positions/snake_up.dart';
 
 import 'food_pixel.dart';
 
@@ -319,25 +315,64 @@ class _HomePageState extends State<HomePage> {
                               SliverGridDelegateWithFixedCrossAxisCount(
                                   crossAxisCount: rowSize),
                           itemBuilder: (context, index) {
-                            if (snakePos.last == index &&
-                                currentDirection == SnakeDirection.left) {
-                              return const SnakeLeft();
-                            } else if (snakePos.last == index &&
-                                currentDirection == SnakeDirection.right) {
-                              return const SnakeRight();
-                            } else if (snakePos.last == index &&
-                                currentDirection == SnakeDirection.up) {
-                              return const SnakeUp();
-                            } else if (snakePos.last == index &&
-                                currentDirection == SnakeDirection.down) {
-                              return const SnakeDown();
-                            } else if (snakePos[0] == index) {
-                              return const SnakeTail();
+                            if (snakePos.last == index) {
+                              return const SnakeHead();
+                            } else if (snakePos[0] == index &&
+                                snakePos[1] == snakePos[0] + 10) {
+                              print("0th Index" + snakePos[0].toString());
+                              print("1th Index" + snakePos[1].toString());
+                              return Padding(
+                                padding: const EdgeInsets.all(2.0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.grey[900],
+                                      borderRadius: BorderRadius.circular(12)),
+                                  child: Image.asset("up.png"),
+                                ),
+                              );
+                            } else if (snakePos[0] == index &&
+                                snakePos[1] == snakePos[0] - 10) {
+                              return Padding(
+                                padding: const EdgeInsets.all(2.0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.grey[900],
+                                      borderRadius: BorderRadius.circular(12)),
+                                  child: Image.asset("down.png"),
+                                ),
+                              );
+                            } else if (snakePos[0] == index &&
+                                snakePos[1] > snakePos[0]) {
+                              return Padding(
+                                padding: const EdgeInsets.all(2.0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.grey[900],
+                                      borderRadius: BorderRadius.circular(12)),
+                                  child: Image.asset("left.png"),
+                                ),
+                              );
+                            } else if (snakePos[0] == index &&
+                                snakePos[1] < snakePos[0]) {
+                              print("0th Index on Left Movement of 1st Index" +
+                                  snakePos[0].toString());
+                              print("1th Index  on Left Movement of 1st Index" +
+                                  snakePos[1].toString());
+                              return Padding(
+                                padding: const EdgeInsets.all(2.0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.grey[900],
+                                      borderRadius: BorderRadius.circular(12)),
+                                  child: Image.asset("right.png"),
+                                ),
+                              );
                             } else if (snakePos.contains(index)) {
                               return const SnakePixel();
                             } else if (foodPos == index) {
                               return const FoodPixel();
-                            } else {
+                            } else if (foodPos != index ||
+                                !snakePos.contains(index)) {
                               return const BlankPixel();
                             }
                           }),
