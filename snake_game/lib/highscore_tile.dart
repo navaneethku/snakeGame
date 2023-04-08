@@ -1,6 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter/material.dart';
 
 class HighScoreTile extends StatelessWidget {
@@ -18,9 +16,13 @@ class HighScoreTile extends StatelessWidget {
               snapshot.data!.data() as Map<String, dynamic>;
 
           return Row(children: [
+            SizedBox(
+              width: 10,
+            ),
             Text(data['score'].toString()),
-            SizedBox(width: 10,),
-            
+            SizedBox(
+              width: 20,
+            ),
             Text(data['name']),
           ]);
         } else {

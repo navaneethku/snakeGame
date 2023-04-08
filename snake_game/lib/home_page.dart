@@ -8,8 +8,6 @@ import 'package:flutter/services.dart';
 import 'package:snake_game/blank_pixel.dart';
 import 'package:snake_game/highscore_tile.dart';
 import 'package:snake_game/snake_pixel.dart';
-import 'package:snake_game/utils.dart';
-
 
 import 'food_pixel.dart';
 
@@ -58,7 +56,7 @@ class _HomePageState extends State<HomePage> {
     await FirebaseFirestore.instance
         .collection("highscores")
         .orderBy("score", descending: true)
-        .limit(5)
+        .limit(10)
         .get()
         .then((value) => value.docs.forEach((element) {
               highscore_DocIds.add(element.reference.id);
@@ -249,43 +247,61 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               children: [
                 Expanded(
+                    flex: 1,
                     child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    //user current score
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text("Current Score"),
-                          Text(
-                            currentScore.toString(),
-                            style: const TextStyle(fontSize: 36),
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        //user current score
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text("Current Score"),
+                              Text(
+                                currentScore.toString(),
+                                style: const TextStyle(fontSize: 36),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    ),
-                    //highscores top 5
-                    Expanded(
-                      child: gameHasStarted
-                          ? Container()
-                          : FutureBuilder(
-                              future: letsGetDocIds,
-                              builder: (context, snapshot) {
-                                return Center(
-                                  child: ListView.builder(
-                                    shrinkWrap: true,
-                                    itemCount: highscore_DocIds.length,
-                                    itemBuilder: ((context, index) {
-                                      return HighScoreTile(
-                                          documentId: highscore_DocIds[index]);
-                                    }),
+                        ),
+                        //highscores top 5
+                        Expanded(
+                          child: gameHasStarted
+                              ? Container()
+                              : Padding(
+                                  padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
+                                  child: Column(
+                                    children: [
+                                      Row(children: [
+                                        Text('Score'),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        Text('Name'),
+                                      ]),
+                                      FutureBuilder(
+                                          future: letsGetDocIds,
+                                          builder: (context, snapshot) {
+                                            return Center(
+                                              child: ListView.builder(
+                                                shrinkWrap: true,
+                                                itemCount:
+                                                    highscore_DocIds.length,
+                                                itemBuilder: ((context, index) {
+                                                  return HighScoreTile(
+                                                      documentId:
+                                                          highscore_DocIds[
+                                                              index]);
+                                                }),
+                                              ),
+                                            );
+                                          }),
+                                    ],
                                   ),
-                                );
-                              }),
-                    ),
-                  ],
-                )),
+                                ),
+                        ),
+                      ],
+                    )),
                 Expanded(
                     flex: 3,
                     child: GestureDetector(
@@ -349,6 +365,7 @@ class _HomePageState extends State<HomePage> {
                           }),
                     )),
                 Expanded(
+                  flex: 1,
                   child: Container(
                     child: Center(
                         child: MaterialButton(
@@ -380,7 +397,7 @@ class SnakeHeadRight extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
             color: Colors.grey[900], borderRadius: BorderRadius.circular(4)),
-        child: Image(image:AssetImage("right.png")),
+        child: const Image(image: AssetImage("assets/images/right.png")),
       ),
     );
   }
@@ -398,7 +415,7 @@ class SnakeHeadUp extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
             color: Colors.grey[900], borderRadius: BorderRadius.circular(4)),
-        child: Image(image:AssetImage("up.png")),
+        child: const Image(image: AssetImage("assets/images/up.png")),
       ),
     );
   }
@@ -416,7 +433,7 @@ class SnakeHeadLeft extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
             color: Colors.grey[900], borderRadius: BorderRadius.circular(4)),
-        child: Image(image:AssetImage("left.png")),
+        child: const Image(image: AssetImage("assets/images/left.png")),
       ),
     );
   }
@@ -434,7 +451,7 @@ class SnakeHeadDown extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
             color: Colors.grey[900], borderRadius: BorderRadius.circular(4)),
-        child: Image(image:AssetImage("down.png")),
+        child: const Image(image: AssetImage("assets/images/down.png")),
       ),
     );
   }
@@ -452,7 +469,7 @@ class SnakeTailDown extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
             color: Colors.grey[900], borderRadius: BorderRadius.circular(4)),
-        child: Image(image:AssetImage("down.png")),
+        child: const Image(image: AssetImage("assets/images/down.png")),
       ),
     );
   }
@@ -470,7 +487,7 @@ class SnakeTailLeft extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
             color: Colors.grey[900], borderRadius: BorderRadius.circular(4)),
-        child: Image(image:AssetImage("left.png")),
+        child: const Image(image: AssetImage("assets/images/left.png")),
       ),
     );
   }
@@ -488,7 +505,7 @@ class SnakeTailRight extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
             color: Colors.grey[900], borderRadius: BorderRadius.circular(4)),
-        child: const Image(image:AssetImage("right.png")),
+        child: const Image(image: AssetImage("assets/images/right.png")),
       ),
     );
   }
@@ -506,7 +523,7 @@ class SnakeTailUp extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
             color: Colors.grey[900], borderRadius: BorderRadius.circular(4)),
-        child: Image(image:AssetImage("up.png")),
+        child: const Image(image: AssetImage("assets/images/up.png")),
       ),
     );
   }
