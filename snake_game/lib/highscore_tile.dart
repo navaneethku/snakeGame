@@ -16,12 +16,9 @@ class HighScoreTile extends StatelessWidget {
               snapshot.data!.data() as Map<String, dynamic>;
 
           return Row(children: [
-            SizedBox(
-              width: 10,
-            ),
             Text(data['score'].toString()),
             SizedBox(
-              width: 20,
+              width: 40,
             ),
             Text(data['name']),
           ]);

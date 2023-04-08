@@ -64,6 +64,17 @@ class _HomePageState extends State<HomePage> {
   }
 
   void startGame() {
+    highscore_DocIds = [];
+    snakePos = [
+      0,
+      1,
+      2,
+    ];
+    foodPos = 55;
+    gameHasStarted = false;
+    currentDirection = SnakeDirection.right;
+    
+    currentScore = 0;
     gameHasStarted = true;
     Timer.periodic(const Duration(milliseconds: 200), (timer) {
       setState(() {
@@ -101,7 +112,7 @@ class _HomePageState extends State<HomePage> {
                           MaterialButton(
                             onPressed: () {
                               Navigator.pop(context);
-                              newGame();
+                              endGame();
                             },
                             child: const Text("Close"),
                             color: Colors.pink,
@@ -119,7 +130,7 @@ class _HomePageState extends State<HomePage> {
                       )
                     ],
                   ),
-                  actions: [],
+                  actions: const [],
                 );
               });
         }
@@ -134,6 +145,15 @@ class _HomePageState extends State<HomePage> {
     database
         .collection('highscores')
         .add({"name": _nameController.text, "score": currentScore});
+  }
+
+  Future endGame() async {
+    highscore_DocIds = [];
+    await getDocId();
+    setState(() {
+      gameHasStarted = false;
+      snakePos.removeLast();
+    });
   }
 
   Future newGame() async {
@@ -270,34 +290,41 @@ class _HomePageState extends State<HomePage> {
                               ? Container()
                               : Padding(
                                   padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
-                                  child: Column(
-                                    children: [
-                                      Row(children: [
-                                        Text('Score'),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        Text('Name'),
-                                      ]),
-                                      FutureBuilder(
-                                          future: letsGetDocIds,
-                                          builder: (context, snapshot) {
-                                            return Center(
-                                              child: ListView.builder(
-                                                shrinkWrap: true,
-                                                itemCount:
-                                                    highscore_DocIds.length,
-                                                itemBuilder: ((context, index) {
-                                                  return HighScoreTile(
-                                                      documentId:
-                                                          highscore_DocIds[
-                                                              index]);
-                                                }),
+                                  child: FutureBuilder(
+                                      future: letsGetDocIds,
+                                      builder: (context, snapshot) {
+                                        return Column(
+                                          children: [
+                                            Row(children: const [
+                                              Text('Score'),
+                                              SizedBox(
+                                                width: 20,
                                               ),
-                                            );
-                                          }),
-                                    ],
-                                  ),
+                                              Text('Name'),
+                                            ]),
+                                            Expanded(
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 10),
+                                                child: Center(
+                                                  child: ListView.builder(
+                                                    shrinkWrap: true,
+                                                    itemCount:
+                                                        highscore_DocIds.length,
+                                                    itemBuilder:
+                                                        ((context, index) {
+                                                      return HighScoreTile(
+                                                          documentId:
+                                                              highscore_DocIds[
+                                                                  index]);
+                                                    }),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                      }),
                                 ),
                         ),
                       ],
@@ -366,15 +393,13 @@ class _HomePageState extends State<HomePage> {
                     )),
                 Expanded(
                   flex: 1,
-                  child: Container(
-                    child: Center(
-                        child: MaterialButton(
-                      child: const Text("PLAY"),
-                      textColor: Colors.white,
-                      color: gameHasStarted ? Colors.grey : Colors.pink,
-                      onPressed: gameHasStarted ? () {} : startGame,
-                    )),
-                  ),
+                  child: Center(
+                      child: MaterialButton(
+                    textColor: Colors.white,
+                    color: gameHasStarted ? Colors.grey : Colors.pink,
+                    onPressed: gameHasStarted ? () {} : startGame,
+                    child: const Text("PLAY"),
+                  )),
                 ),
               ],
             ),
