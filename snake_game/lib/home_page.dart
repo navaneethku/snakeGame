@@ -380,7 +380,7 @@ class SnakeHeadRight extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
             color: Colors.grey[900], borderRadius: BorderRadius.circular(4)),
-        child: Image.asset(path("right.png")),
+        child: Image(image:AssetImage("right.png")),
       ),
     );
   }
@@ -398,7 +398,7 @@ class SnakeHeadUp extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
             color: Colors.grey[900], borderRadius: BorderRadius.circular(4)),
-        child: Image.asset(path("up.png")),
+        child: Image(image:AssetImage("up.png")),
       ),
     );
   }
@@ -416,7 +416,7 @@ class SnakeHeadLeft extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
             color: Colors.grey[900], borderRadius: BorderRadius.circular(4)),
-        child: Image.asset(path("left.png")),
+        child: Image(image:AssetImage("left.png")),
       ),
     );
   }
@@ -434,7 +434,7 @@ class SnakeHeadDown extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
             color: Colors.grey[900], borderRadius: BorderRadius.circular(4)),
-        child: Image.asset(path("down.png")),
+        child: Image(image:AssetImage("down.png")),
       ),
     );
   }
@@ -452,7 +452,7 @@ class SnakeTailDown extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
             color: Colors.grey[900], borderRadius: BorderRadius.circular(4)),
-        child: Image.asset(path("down.png")),
+        child: Image(image:AssetImage("down.png")),
       ),
     );
   }
@@ -470,7 +470,7 @@ class SnakeTailLeft extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
             color: Colors.grey[900], borderRadius: BorderRadius.circular(4)),
-        child: Image.asset(path("left.png")),
+        child: Image(image:AssetImage("left.png")),
       ),
     );
   }
@@ -488,7 +488,7 @@ class SnakeTailRight extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
             color: Colors.grey[900], borderRadius: BorderRadius.circular(4)),
-        child: Image.asset(path("right.png")),
+        child: const Image(image:AssetImage("right.png")),
       ),
     );
   }
@@ -506,7 +506,7 @@ class SnakeTailUp extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
             color: Colors.grey[900], borderRadius: BorderRadius.circular(4)),
-        child: Image.asset(path("up.png")),
+        child: Image(image:AssetImage("up.png")),
       ),
     );
   }
