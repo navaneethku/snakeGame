@@ -44,11 +44,14 @@ class _HomePageState extends State<HomePage> {
   //highscore list
 
   List<String> highscore_DocIds = [];
+  List<String> allHighscore_DocIds = [];
   late final Future? letsGetDocIds;
+  late final Future? letsGetAllDocIds;
 
   @override
   void initState() {
     letsGetDocIds = getDocId();
+    letsGetAllDocIds = getAllDocId();
     super.initState();
   }
 
@@ -56,10 +59,20 @@ class _HomePageState extends State<HomePage> {
     await FirebaseFirestore.instance
         .collection("highscores")
         .orderBy("score", descending: true)
-        .limit(10)
+        .limit(3)
         .get()
         .then((value) => value.docs.forEach((element) {
               highscore_DocIds.add(element.reference.id);
+            }));
+  }
+
+  Future getAllDocId() async {
+    await FirebaseFirestore.instance
+        .collection("highscores")
+        .orderBy("score", descending: true)
+        .get()
+        .then((value) => value.docs.forEach((element) {
+              allHighscore_DocIds.add(element.reference.id);
             }));
   }
 
@@ -73,7 +86,7 @@ class _HomePageState extends State<HomePage> {
     foodPos = 55;
     gameHasStarted = false;
     currentDirection = SnakeDirection.right;
-    
+
     currentScore = 0;
     gameHasStarted = true;
     Timer.periodic(const Duration(milliseconds: 200), (timer) {
@@ -99,7 +112,7 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       Column(
                         children: [
-                          Text("Your score is:" + currentScore.toString()),
+                          Text("Your score is: $currentScore"),
                           TextField(
                               controller: _nameController,
                               decoration: const InputDecoration(
@@ -114,8 +127,8 @@ class _HomePageState extends State<HomePage> {
                               Navigator.pop(context);
                               endGame();
                             },
+                            color: Colors.red,
                             child: const Text("Close"),
-                            color: Colors.pink,
                           ),
                           MaterialButton(
                             onPressed: () {
@@ -123,8 +136,8 @@ class _HomePageState extends State<HomePage> {
                               submitScore();
                               newGame();
                             },
+                            color: Colors.red,
                             child: const Text("Submit"),
-                            color: Colors.pink,
                           ),
                         ],
                       )
@@ -140,8 +153,6 @@ class _HomePageState extends State<HomePage> {
 
   void submitScore() {
     var database = FirebaseFirestore.instance;
-    print(_nameController.text);
-    print(currentScore);
     database
         .collection('highscores')
         .add({"name": _nameController.text, "score": currentScore});
@@ -289,7 +300,7 @@ class _HomePageState extends State<HomePage> {
                           child: gameHasStarted
                               ? Container()
                               : Padding(
-                                  padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
+                                  padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
                                   child: FutureBuilder(
                                       future: letsGetDocIds,
                                       builder: (context, snapshot) {
@@ -308,7 +319,6 @@ class _HomePageState extends State<HomePage> {
                                                     top: 10),
                                                 child: Center(
                                                   child: ListView.builder(
-                                                    shrinkWrap: true,
                                                     itemCount:
                                                         highscore_DocIds.length,
                                                     itemBuilder:
@@ -321,6 +331,79 @@ class _HomePageState extends State<HomePage> {
                                                   ),
                                                 ),
                                               ),
+                                            ),
+                                            Container(
+                                              alignment: Alignment.centerLeft,
+                                              child: gameHasStarted
+                                                  ? Container()
+                                                  : TextButton(
+                                                      style:
+                                                          TextButton.styleFrom(
+                                                              foregroundColor:
+                                                                  Colors.white,
+                                                              backgroundColor:
+                                                                  Colors.red),
+                                                      onPressed: () {
+                                                        showDialog(
+                                                            context: context,
+                                                            builder: (context) {
+                                                              return AlertDialog(
+                                                                  backgroundColor:
+                                                                      const Color
+                                                                              .fromARGB(
+                                                                          255,
+                                                                          59,
+                                                                          56,
+                                                                          56),
+                                                                  alignment:
+                                                                      Alignment
+                                                                          .center,
+                                                                  content:
+                                                                      Column(
+                                                                    children: [
+                                                                      const Text(
+                                                                        "LEADERBOARD",
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                                24,
+                                                                            color:
+                                                                                Colors.white),
+                                                                      ),
+                                                                      Container(
+                                                                        alignment:
+                                                                            Alignment.center,
+                                                                        width:
+                                                                            500,
+                                                                        height:
+                                                                            500,
+                                                                        child:
+                                                                            Padding(
+                                                                          padding:
+                                                                              const EdgeInsets.only(top: 10),
+                                                                          child: ListView.builder(
+                                                                              padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                                                                              shrinkWrap: true,
+                                                                              itemCount: allHighscore_DocIds.length,
+                                                                              itemBuilder: ((context, index) {
+                                                                                return Column(
+                                                                                  children: [
+                                                                                    Container(padding: const EdgeInsets.fromLTRB(4, 2, 4, 2), decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: const Color.fromARGB(255, 232, 98, 88)), child: HighScoreTile(documentId: allHighscore_DocIds[index])),
+                                                                                    Container(
+                                                                                      color: const Color.fromARGB(255, 59, 56, 56),
+                                                                                      height: 5,
+                                                                                    )
+                                                                                  ],
+                                                                                );
+                                                                              })),
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ));
+                                                            });
+                                                      },
+                                                      child: const Text(
+                                                          "View Leaderboard"),
+                                                    ),
                                             ),
                                           ],
                                         );
@@ -396,7 +479,7 @@ class _HomePageState extends State<HomePage> {
                   child: Center(
                       child: MaterialButton(
                     textColor: Colors.white,
-                    color: gameHasStarted ? Colors.grey : Colors.pink,
+                    color: gameHasStarted ? Colors.grey : Colors.red,
                     onPressed: gameHasStarted ? () {} : startGame,
                     child: const Text("PLAY"),
                   )),
