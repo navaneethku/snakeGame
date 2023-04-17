@@ -70,6 +70,7 @@ class _HomePageState extends State<HomePage> {
     await FirebaseFirestore.instance
         .collection("highscores")
         .orderBy("score", descending: true)
+        .limit(25)
         .get()
         .then((value) => value.docs.forEach((element) {
               allHighscore_DocIds.add(element.reference.id);
@@ -300,7 +301,8 @@ class _HomePageState extends State<HomePage> {
                           child: gameHasStarted
                               ? Container()
                               : Padding(
-                                  padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+                                  padding:
+                                      const EdgeInsets.fromLTRB(0, 20, 0, 20),
                                   child: FutureBuilder(
                                       future: letsGetDocIds,
                                       builder: (context, snapshot) {
@@ -331,79 +333,6 @@ class _HomePageState extends State<HomePage> {
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                            Container(
-                                              alignment: Alignment.centerLeft,
-                                              child: gameHasStarted
-                                                  ? Container()
-                                                  : TextButton(
-                                                      style:
-                                                          TextButton.styleFrom(
-                                                              foregroundColor:
-                                                                  Colors.white,
-                                                              backgroundColor:
-                                                                  Colors.red),
-                                                      onPressed: () {
-                                                        showDialog(
-                                                            context: context,
-                                                            builder: (context) {
-                                                              return AlertDialog(
-                                                                  backgroundColor:
-                                                                      const Color
-                                                                              .fromARGB(
-                                                                          255,
-                                                                          59,
-                                                                          56,
-                                                                          56),
-                                                                  alignment:
-                                                                      Alignment
-                                                                          .center,
-                                                                  content:
-                                                                      Column(
-                                                                    children: [
-                                                                      const Text(
-                                                                        "LEADERBOARD",
-                                                                        style: TextStyle(
-                                                                            fontSize:
-                                                                                24,
-                                                                            color:
-                                                                                Colors.white),
-                                                                      ),
-                                                                      Container(
-                                                                        alignment:
-                                                                            Alignment.center,
-                                                                        width:
-                                                                            500,
-                                                                        height:
-                                                                            500,
-                                                                        child:
-                                                                            Padding(
-                                                                          padding:
-                                                                              const EdgeInsets.only(top: 10),
-                                                                          child: ListView.builder(
-                                                                              padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-                                                                              shrinkWrap: true,
-                                                                              itemCount: allHighscore_DocIds.length,
-                                                                              itemBuilder: ((context, index) {
-                                                                                return Column(
-                                                                                  children: [
-                                                                                    Container(padding: const EdgeInsets.fromLTRB(4, 2, 4, 2), decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: const Color.fromARGB(255, 232, 98, 88)), child: HighScoreTile(documentId: allHighscore_DocIds[index])),
-                                                                                    Container(
-                                                                                      color: const Color.fromARGB(255, 59, 56, 56),
-                                                                                      height: 5,
-                                                                                    )
-                                                                                  ],
-                                                                                );
-                                                                              })),
-                                                                        ),
-                                                                      ),
-                                                                    ],
-                                                                  ));
-                                                            });
-                                                      },
-                                                      child: const Text(
-                                                          "View Leaderboard"),
-                                                    ),
                                             ),
                                           ],
                                         );
@@ -477,12 +406,127 @@ class _HomePageState extends State<HomePage> {
                 Expanded(
                   flex: 1,
                   child: Center(
-                      child: MaterialButton(
-                    textColor: Colors.white,
-                    color: gameHasStarted ? Colors.grey : Colors.red,
-                    onPressed: gameHasStarted ? () {} : startGame,
-                    child: const Text("PLAY"),
-                  )),
+                    child: Column(
+                      children: [
+                        Container(
+                          child: gameHasStarted
+                              ? Container()
+                              : TextButton(
+                                  style: TextButton.styleFrom(
+                                      foregroundColor: Colors.white,
+                                      backgroundColor: Colors.red),
+                                  onPressed: () {
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return AlertDialog(
+                                              actionsAlignment:
+                                                  MainAxisAlignment.center,
+                                              actions: [
+                                                MaterialButton(
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                  color: Colors.red,
+                                                  child: const Text("Close"),
+                                                ),
+                                              ],
+                                              backgroundColor:
+                                                  const Color.fromARGB(
+                                                      255, 59, 56, 56),
+                                              alignment: Alignment.center,
+                                              content: Column(
+                                                children: [
+                                                  const Text(
+                                                    "LEADERBOARD",
+                                                    style: TextStyle(
+                                                        fontSize: 24,
+                                                        color: Colors.white),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 30,
+                                                  ),
+                                                  Row(children: const [
+                                                    Text('Score'),
+                                                    SizedBox(
+                                                      width: 30,
+                                                    ),
+                                                    Text('Name'),
+                                                  ]),
+                                                  Container(
+                                                    alignment: Alignment.center,
+                                                    width: 500,
+                                                    height: 500,
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              top: 10),
+                                                      child: ListView.builder(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .fromLTRB(
+                                                                  0, 5, 0, 5),
+                                                          shrinkWrap: true,
+                                                          itemCount:
+                                                              allHighscore_DocIds
+                                                                  .length,
+                                                          itemBuilder:
+                                                              ((context,
+                                                                  index) {
+                                                            return Column(
+                                                              children: [
+                                                                Container(
+                                                                    padding:
+                                                                        const EdgeInsets.fromLTRB(
+                                                                            8,
+                                                                            4,
+                                                                            4,
+                                                                            8),
+                                                                    decoration: BoxDecoration(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(
+                                                                                5),
+                                                                        color: const Color.fromARGB(
+                                                                            255,
+                                                                            232,
+                                                                            98,
+                                                                            88)),
+                                                                    child: HighScoreTile(
+                                                                        documentId:
+                                                                            allHighscore_DocIds[index])),
+                                                                Container(
+                                                                  color: const Color
+                                                                          .fromARGB(
+                                                                      255,
+                                                                      59,
+                                                                      56,
+                                                                      56),
+                                                                  height: 5,
+                                                                )
+                                                              ],
+                                                            );
+                                                          })),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ));
+                                        });
+                                  },
+                                  child: const Text("View Leaderboard"),
+                                ),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        MaterialButton(
+                          textColor: Colors.white,
+                          color: gameHasStarted ? Colors.grey : Colors.red,
+                          onPressed: gameHasStarted ? () {} : startGame,
+                          child: const Text("PLAY"),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ],
             ),
