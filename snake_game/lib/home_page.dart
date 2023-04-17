@@ -59,7 +59,7 @@ class _HomePageState extends State<HomePage> {
     await FirebaseFirestore.instance
         .collection("highscores")
         .orderBy("score", descending: true)
-        .limit(3)
+        .limit(5)
         .get()
         .then((value) => value.docs.forEach((element) {
               highscore_DocIds.add(element.reference.id);
@@ -128,7 +128,7 @@ class _HomePageState extends State<HomePage> {
                               Navigator.pop(context);
                               endGame();
                             },
-                            color: Colors.red,
+                            color: const Color(0xfff44336),
                             child: const Text("Close"),
                           ),
                           MaterialButton(
@@ -137,7 +137,7 @@ class _HomePageState extends State<HomePage> {
                               submitScore();
                               newGame();
                             },
-                            color: Colors.red,
+                            color: const Color(0xfff44336),
                             child: const Text("Submit"),
                           ),
                         ],
@@ -414,7 +414,7 @@ class _HomePageState extends State<HomePage> {
                               : TextButton(
                                   style: TextButton.styleFrom(
                                       foregroundColor: Colors.white,
-                                      backgroundColor: Colors.red),
+                                      backgroundColor: const Color(0xfff44336)),
                                   onPressed: () {
                                     showDialog(
                                         context: context,
@@ -427,7 +427,8 @@ class _HomePageState extends State<HomePage> {
                                                   onPressed: () {
                                                     Navigator.pop(context);
                                                   },
-                                                  color: Colors.red,
+                                                  color:
+                                                      const Color(0xfff44336),
                                                   child: const Text("Close"),
                                                 ),
                                               ],
@@ -520,7 +521,9 @@ class _HomePageState extends State<HomePage> {
                         ),
                         MaterialButton(
                           textColor: Colors.white,
-                          color: gameHasStarted ? Colors.grey : Colors.red,
+                          color: gameHasStarted
+                              ? Colors.grey
+                              : const Color(0xfff44336),
                           onPressed: gameHasStarted ? () {} : startGame,
                           child: const Text("PLAY"),
                         ),
